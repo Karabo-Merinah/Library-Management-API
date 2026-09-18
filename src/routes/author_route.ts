@@ -1,32 +1,32 @@
 
-import {Router,Request,Response} from "express"
-import {body,param,validationResult} from "express-validator"
+import { Router, Request, Response } from "express"
+import { body, param, validationResult } from "express-validator"
 
 
-const router=Router()
+const router = Router()
 
-let authors =[{id:1,name:"Karabo",surname:"Sekosana",number_of_books:4},
-    {id:2,name:"Karbie",surname:"Mlambo",number_of_books:2}
+let authors = [{ id: 1, name: "Karabo", surname: "Sekosana", number_of_books: 4 },
+{ id: 2, name: "Karbie", surname: "Mlambo", number_of_books: 2 }
 ]
 //gettting all authors
 
-router.get ("/",(req:Request,res:Response)=>{
+router.get("/", (req: Request, res: Response) => {
     res.status(200).json(authors)
 })
 //retrieving users using id
 
-router.get("/:id",[param("id").isInt().withMessage("ID must be a number")],(req:Request,res:Response)=>{
-    const errors=validationResult(req)
+router.get("/:id", [param("id").isInt().withMessage("ID must be a number")], (req: Request, res: Response) => {
+    const errors = validationResult(req)
 
-    console.log(errors,"Errors from express -validator middleware")
+    console.log(errors, "Errors from express -validator middleware")
 
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()})
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
-    const id =Number(req.params.id)
-    const author=authors.find((author)=>author.id === id)
+    const id = Number(req.params.id)
+    const author = authors.find((author) => author.id === id)
 
-    if(!author){
+    if (!author) {
         return res.status(404).send("User is not found")
     }
     res.status(200).json(author)
@@ -34,19 +34,63 @@ router.get("/:id",[param("id").isInt().withMessage("ID must be a number")],(req:
 )
 //adding a user in the existing array 
 
-router.post("/",[body("name").notEmpty().withMessage("Name is required "),
-    body("surname").notEmpty().withMessage("Surname of the author is required"),
-],(req:Request,res:Response)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array})
+router.post("/", [body("name").notEmpty().withMessage("Name is required "),
+body("surname").notEmpty().withMessage("Surname of the author is required"),
+], (req: Request, res: Response) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
     console.log(req)
-    const {name,surname,number_of_books}=req.body
-    const newAuthor={id:authors.length +1,name,surname,number_of_books}
+    const { name, surname, number_of_books } = req.body
+    const newAuthor = { id: authors.length + 1, name, surname, number_of_books }
     authors.push(newAuthor)
 
     res.status(201).json(newAuthor)
+})
+
+// updating an author
+router.put("/:id"), [param("id").isInt().withMessage("Author id must be a number"),
+body("name").notEmpty().withMessage("Author name is required"),
+body("surname").notEmpty().withMessage("Surname of the author is required"),
+], (req: Request, res: Response) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+    const id = Number(req.params.id)
+    const author = authors.find((author) => author.id === id)
+
+    if (!author) {
+        return res.status(404).send("Author not found")
+    }
+
+    const { name, surname, number_of_books } = req.body
+    const updatedAuthor = { id, name, surname, number_of_books }
+
+    //find the position of the objcet 
+    authors[authors.indexOf(author)] = updatedAuthor
+
+    res.status(200).json(updatedAuthor)
+}
+
+//deleting author by providing id
+router.delete("/:id", [param("id").isInt().withMessage("ID must be a number")], (req: Request, res: Response) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+    const id = Number(req.params.id)
+    const deletedAuthor = authors.find((author) => author.id === id)
+
+    if (!deletedAuthor) {
+        return res.status(404).send("User is not found")
+    }
+
+    // keep everyone not the one we're deleting
+    authors = authors.filter((author) => author.id !== id)
+
+    res.status(200).json(deletedAuthor)
 })
 
 
