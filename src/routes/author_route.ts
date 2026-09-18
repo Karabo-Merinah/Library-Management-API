@@ -2,7 +2,7 @@
 import {Router,Request,Response} from "express"
 import {body,param,validationResult} from "express-validator"
 
-//gets all authors 
+
 const router=Router()
 
 let authors =[{id:1,name:"Karabo",surname:"Sekosana",number_of_books:4},
@@ -48,6 +48,7 @@ router.post("/",[body("name").notEmpty().withMessage("Name is required "),
 
     res.status(201).json(newAuthor)
 })
+
 
 export default router
 
