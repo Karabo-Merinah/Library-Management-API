@@ -4,5 +4,5 @@ export interface Author{
     name:string,
     surname:string,
     number_of_books:number
-    book_id:number
+    // book_id:number
 }
