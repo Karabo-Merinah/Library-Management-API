@@ -1,0 +1,25 @@
+{
+  "name": "library-api-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/server.ts",
+    "test": "nodemon --exec ts-node src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.3",
+    "body-parser": "^2.3.0",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "typescript": "^5.4.5"
+  }
+}
