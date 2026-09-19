@@ -10,5 +10,9 @@ let books=[{book_id:1,title:"How to get away with murder",category:"Thriller",pa
 
 //getting all books 
 router.get("/",(req:Request,res:Response)=>{
-    
+    res.status(200).json(books)
 })
+
+// //getting books by id 
+
+// router.get("/:id").[param("id").isInt("id")]

@@ -2,18 +2,19 @@
 import { Router, Request, Response } from "express"
 import { body, param, validationResult } from "express-validator"
 
-
 const router = Router()
 
 let authors = [{ id: 1, name: "Karabo", surname: "Sekosana", number_of_books: 4 },
 { id: 2, name: "Karbie", surname: "Mlambo", number_of_books: 2 }
 ]
+
+let nextAuthorId=3
 //gettting all authors
 
 router.get("/", (req: Request, res: Response) => {
     res.status(200).json(authors)
 })
-//retrieving users using id
+//retrieving author  using id
 
 router.get("/:id", [param("id").isInt().withMessage("ID must be a number")], (req: Request, res: Response) => {
     const errors = validationResult(req)
@@ -27,12 +28,12 @@ router.get("/:id", [param("id").isInt().withMessage("ID must be a number")], (re
     const author = authors.find((author) => author.id === id)
 
     if (!author) {
-        return res.status(404).send("User is not found")
+        return res.status(404).json({message:"Author is not found"})
     }
     res.status(200).json(author)
 }
 )
-//adding a user in the existing array 
+//adding an author in the existing array 
 
 router.post("/", [body("name").notEmpty().withMessage("Name is required "),
 body("surname").notEmpty().withMessage("Surname of the author is required"),
@@ -43,14 +44,15 @@ body("surname").notEmpty().withMessage("Surname of the author is required"),
     }
     console.log(req)
     const { name, surname, number_of_books } = req.body
-    const newAuthor = { id: authors.length + 1, name, surname, number_of_books }
+    const newAuthor = { id:nextAuthorId, name, surname, number_of_books }
     authors.push(newAuthor)
+    nextAuthorId++
 
     res.status(201).json(newAuthor)
 })
 
 // updating an author
-router.put("/:id"), [param("id").isInt().withMessage("Author id must be a number"),
+router.put("/:id", [param("id").isInt().withMessage("Author id must be a number"),
 body("name").notEmpty().withMessage("Author name is required"),
 body("surname").notEmpty().withMessage("Surname of the author is required"),
 ], (req: Request, res: Response) => {
@@ -62,7 +64,7 @@ body("surname").notEmpty().withMessage("Surname of the author is required"),
     const author = authors.find((author) => author.id === id)
 
     if (!author) {
-        return res.status(404).send("Author not found")
+        return res.status(404).json({message:"Author not found"})
     }
 
     const { name, surname, number_of_books } = req.body
@@ -72,7 +74,7 @@ body("surname").notEmpty().withMessage("Surname of the author is required"),
     authors[authors.indexOf(author)] = updatedAuthor
 
     res.status(200).json(updatedAuthor)
-}
+})
 
 //deleting author by providing id
 router.delete("/:id", [param("id").isInt().withMessage("ID must be a number")], (req: Request, res: Response) => {
@@ -84,12 +86,11 @@ router.delete("/:id", [param("id").isInt().withMessage("ID must be a number")], 
     const deletedAuthor = authors.find((author) => author.id === id)
 
     if (!deletedAuthor) {
-        return res.status(404).send("User is not found")
+        return res.status(404).json({message:"Author is not found"})
     }
 
-    // keep everyone not the one we're deleting
+    // keep all authors that their id is not equal to the one provided 
     authors = authors.filter((author) => author.id !== id)
-
     res.status(200).json(deletedAuthor)
 })
 
