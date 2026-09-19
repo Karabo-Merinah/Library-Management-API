@@ -42,7 +42,6 @@ body("surname").notEmpty().withMessage("Surname of the author is required"),
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
     }
-    console.log(req)
     const { name, surname, number_of_books } = req.body
     const newAuthor = { id:nextAuthorId, name, surname, number_of_books }
     authors.push(newAuthor)
@@ -91,9 +90,9 @@ router.delete("/:id", [param("id").isInt().withMessage("ID must be a number")], 
 
     // keep all authors that their id is not equal to the one provided 
     authors = authors.filter((author) => author.id !== id)
-    res.status(200).json(deletedAuthor)
+    res.status(204).send()
 })
 
 
 export default router
-
+export {authors}

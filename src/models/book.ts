@@ -1,7 +1,6 @@
-
 export interface Book{
-    book_id:number,
+    id:number,
     title:string,
     category:string,
-    page_number:number
+    author_id:number
 }
