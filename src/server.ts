@@ -6,7 +6,7 @@ import book_router from "./routes/book_routes"
 //creates express application 
 
 const app:Express=express()
-const PORT =process.env.PORT  || 5000
+const PORT =5000
 
 //Built in middleware-parse incoming request
 app.use(express.json())
@@ -17,6 +17,6 @@ app.use("/authors",router)
 app.use("/books",book_router)
 
 app.listen(PORT,()=>{
-    console.log(`Server is running on htpp://localhost:${PORT}`)
+    console.log(`Server is running on http://localhost:${PORT}`)
 })
 
