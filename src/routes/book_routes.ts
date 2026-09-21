@@ -36,7 +36,7 @@ book_router.get("/:id", [param("id").isInt().withMessage("Book id must be a numb
 book_router.post("/", [body("title").isString().trim().notEmpty().withMessage("Title is  required and must be a string "),
 body("category").isString().trim().notEmpty().withMessage("Category is required and must be a string"),
 body("author_id").isInt().withMessage("Author id  must be a number"),
-body("year").isInt().withMessage("Year of the book was published must be a number")], (req: Request, res: Response) => {
+body("year").isInt({min:1000}).withMessage("Year of the book was published must be a number")], (req: Request, res: Response) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         throw { message: "Validation failed", statusCode: 400, errors: errors.array() }
@@ -64,7 +64,7 @@ body("year").isInt().withMessage("Year of the book was published must be a numbe
 book_router.put("/:id", [param("id").isInt().withMessage("Book id must be a number"),
 body("title").isString().trim().notEmpty().withMessage("Title is required and must be a string "),
 body("category").isString().trim().notEmpty().withMessage("Category is required and must be a string "),
-body("year").isInt().withMessage("Year book  is published must be a number "),
+body("year").isInt({min:1000}).withMessage("Year book  is published must be a number "),
 body("author_id").isInt().withMessage("Author id must be a number")], (req: Request, res: Response) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -110,4 +110,5 @@ book_router.delete("/:id", [param("id").isInt().withMessage("Book id must be a n
 })
 
 export default book_router
+export {books}
 

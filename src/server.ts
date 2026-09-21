@@ -3,6 +3,7 @@ import express, { type Express } from "express"
 import { loggerMiddleware } from "./middleware/logger"
 import router from "./routes/author_route"
 import book_router from "./routes/book_routes"
+import author_books_router from "./routes/book_author"
 import { errorHandler, routeNotFound } from "./middleware/errorHandler"
 //creates express application 
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json())
 app.use(loggerMiddleware)
 app.use("/authors",router)
 app.use("/books",book_router)
+app.use("/authors",author_books_router)
 
 app.use(routeNotFound)
 app.use(errorHandler)
