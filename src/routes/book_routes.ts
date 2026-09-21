@@ -4,7 +4,7 @@ import { authors } from "./author_route"
 
 const book_router = Router()
 
-let books = [{ id: 1, title: "How to get away with murder", category: "Thriller",year:2020, author_id: 1 },
+let books = [{ id: 1, title: "Smile", category: "Thriller",year:2020, author_id: 1 },
 { id: 2, title: "The rough patch", category: "Educational", year:2025,author_id: 2 }
 ]
 
