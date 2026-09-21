@@ -34,8 +34,8 @@ router.get("/:id", [param("id").isInt().withMessage("ID must be a number")], (re
 )
 //adding an author in the existing array 
 
-router.post("/", [body("name").notEmpty().withMessage("Name is required "),
-body("surname").notEmpty().withMessage("Surname of the author is required"),
+router.post("/", [body("name").isString().trim().notEmpty().withMessage("Name is required and must be a string"),
+body("surname").isString().trim().notEmpty().withMessage("Surname of the author is required and must be a string"),
 body("number_of_books").isInt({ min: 1 }).withMessage("Number of books must not be less than 1 ")
 ], (req: Request, res: Response) => {
     const errors = validationResult(req)
@@ -61,8 +61,8 @@ body("number_of_books").isInt({ min: 1 }).withMessage("Number of books must not 
 
 // updating an author
 router.put("/:id", [param("id").isInt().withMessage("Author id must be a number"),
-body("name").notEmpty().withMessage("Author name is required"),
-body("surname").notEmpty().withMessage("Surname of the author is required"),
+body("name").isString().trim().notEmpty().withMessage("Author name is required and must be a string"),
+body("surname").isString().trim().notEmpty().withMessage("Surname of the author is required and must be a string"),
 body("number_of_books").isInt({ min: 1 }).withMessage("Number of books must not be less than 1 ")
 ], (req: Request, res: Response) => {
     const errors = validationResult(req)
@@ -107,7 +107,6 @@ router.delete("/:id", [param("id").isInt().withMessage("ID must be a number")], 
     authors = authors.filter((author) => author.id !== id)
     return res.status(204).send()
 })
-
 
 export default router
 export { authors }
